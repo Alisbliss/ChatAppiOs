@@ -106,14 +106,15 @@ class RegisterViewController: UIViewController {
         
         let credential = AuthCredential(email: email, passward: passward, username: username, fullname: fullName, profileImage: profileImage)
         showLoader(true)
-        AuthServices.registerUser(credential: credential) { [weak self] error in
-            self?.showLoader(false)
+        AuthServices.registerUser(credential: credential) { [unowned self] error in
+            self.showLoader(false)
             if let error = error {
                 print(error.localizedDescription)
                 return
             }
+            self.delegate?.didSuccessCreateAccount(self)
         }
-        delegate?.didSuccessCreateAccount(self)
+        
     }
     
     @objc func handleTextChange(sender: UITextField) {
