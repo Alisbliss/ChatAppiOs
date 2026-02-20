@@ -14,6 +14,7 @@ class ChatViewController: UICollectionViewController {
     private lazy var customeInputView: CustomeInputView = {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
         let view = CustomeInputView(frame: frame)
+        view.delegate = self
         return view
     }()
     //MARK: LifeCircle
@@ -71,5 +72,13 @@ extension ChatViewController: UICollectionViewDelegateFlowLayout {
         let targetSize = CGSize(width: view.frame.width, height: 1000)
         let estimateSize = cell.systemLayoutSizeFitting(targetSize)
         return .init(width: view.frame.width, height: estimateSize.height)
+    }
+}
+
+extension ChatViewController: CustomeInputDelegate {
+    func inputView(_ view: CustomeInputView, wantUploadMessage message: String) {
+        messages.append(message)
+        collectionView.reloadData()
+        view.clearTextView()
     }
 }
