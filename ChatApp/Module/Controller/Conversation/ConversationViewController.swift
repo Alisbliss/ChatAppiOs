@@ -12,9 +12,36 @@ class ConversationViewController: UIViewController {
     
     //MARK: Properties
     private var user: User
+    private var unReadCount: Int = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                self.unreadMsgLabel.isHidden = self.unReadCount == 0
+            }
+        }
+    }
     
     private let tableView = UITableView()
     
+    private let unreadMsgLabel: UILabel = {
+        let label = UILabel()
+        label.text = "7"
+        label.textColor = .white
+        label.backgroundColor = .red
+        label.setDimensions(height: 40, width: 40)
+        label.layer.cornerRadius = 20
+        label.textAlignment = .center
+        label.clipsToBounds = true
+        label.isHidden = true
+        return label
+    }()
+    
+    private var conversations: [Message] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
+    private var conversationDictionary = [String: Message]()
     //MARK: LifeCircle
     init(user: User) {
         self.user = user
@@ -29,6 +56,7 @@ class ConversationViewController: UIViewController {
         super.viewDidLoad()
         configureTableView()
         configure()
+        fetchConversation()
     }
     
     //MARK: Helpers
@@ -51,8 +79,25 @@ class ConversationViewController: UIViewController {
         
         view.addSubview(tableView)
         tableView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddingLeft: 15, paddingRight: 15)
+        
+        view.addSubview(unreadMsgLabel)
+        unreadMsgLabel.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingLeft: 20, paddingBottom: 10)
     }
     
+    private func fetchConversation() {
+        MessageService.fetchRecentMessages { [unowned self] conversations in
+            conversations.forEach { conversation in
+                self.conversationDictionary[conversation.chatPartnerID] = conversation
+            }
+            self.conversations = Array(self.conversationDictionary.values)
+            unReadCount = 0
+            self.conversations.forEach { msg in
+                unReadCount += msg.new_msg
+            }
+            unreadMsgLabel.text = "\(unReadCount)"
+            UIApplication.shared.applicationIconBadgeNumber = unReadCount
+        }
+    }
     @objc func handleLogout() {
         do {
             try Auth.auth().signOut()
@@ -65,25 +110,46 @@ class ConversationViewController: UIViewController {
     
     @objc func handleNewChat() {
         let controller = NewConversationController()
+        controller.delegate = self
         let nav = UINavigationController(rootViewController: controller)
         present(nav, animated: true)
         
+    }
+    
+    private func openChat(currentUser: User, otherUser: User) {
+        let controller = ChatViewController(currentUser: currentUser, otherUser: otherUser)
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
 //MARK: = TableView
 extension ConversationViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return conversations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ConversationCell.description(), for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: ConversationCell.description(), for: indexPath) as! ConversationCell
+        let conversation = conversations[indexPath.row]
+        cell.viewModel = MessageViewModel(message: conversation)
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let controller = ChatViewController()
-        navigationController?.pushViewController(controller, animated: true)
+        let conversation = conversations[indexPath.row]
+        
+        showLoader(true)
+        UserService.fetchUser(uid: conversation.chatPartnerID) { [unowned self] otherUser in
+            showLoader(false)
+            openChat(currentUser: user, otherUser: otherUser)
+        }
     }
     
+}
+
+extension ConversationViewController: NewConversationControllerDelegate {
+    func controller(_vc: NewConversationController, wantChatWithUser otherUser: User) {
+        _vc.dismiss(animated: true, completion: nil)
+        print(otherUser.fullname)
+        openChat(currentUser: user, otherUser: otherUser)
+    }
 }
