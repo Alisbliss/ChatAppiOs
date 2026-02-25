@@ -10,6 +10,7 @@ import Firebase
 
 class ChatViewController: UICollectionViewController {
     //MARK: Properties
+    
     private var messages = [[Message]]()
     
     private lazy var customeInputView: CustomeInputView = {
@@ -19,8 +20,30 @@ class ChatViewController: UICollectionViewController {
         return view
     }()
     
-    private var currentUser: User
-    private var otherUser: User
+    private lazy var attachAlert: UIAlertController = { [weak self] in
+        let alert = UIAlertController(title: "Attach File", message: "Select the button you want to attach from", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+            self?.handleCamera()
+        }))
+        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+            self?.handleGallery()
+        }))
+        alert.addAction(UIAlertAction(title: "Location", style: .default, handler: { _ in
+            print("location")
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        return alert
+    }()
+    
+    lazy var imagePicker: UIImagePickerController = {
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        return picker
+    }()
+    
+    var currentUser: User
+    var otherUser: User
     //MARK: LifeCircle
     init(currentUser: User,otherUser: User) {
         self.currentUser = currentUser
@@ -116,6 +139,7 @@ class ChatViewController: UICollectionViewController {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChatCell.description(), for: indexPath) as! ChatCell
             let message = messages[indexPath.section][indexPath.row]
             cell.viewModel = MessageViewModel(message: message)
+            cell.delegate = self
             return cell
         }
         
@@ -142,14 +166,18 @@ class ChatViewController: UICollectionViewController {
     }
     
 extension ChatViewController: CustomeInputDelegate {
-  
-        func inputView(_ view: CustomeInputView, wantUploadMessage message: String) {
-            MessageService.fetchSingleRecentMsg(otherUser: otherUser) { [unowned self] unreadCount in
-                MessageService.uploadMessage(message: message, currentUser: currentUser, unReadCount: unreadCount + 1, otherUser: otherUser) { error in
-                    self.collectionView.reloadData()
-                    
-                }
-            }
-            view.clearTextView()
-        }
+    func inputViewforAttach(_ view: CustomeInputView) {
+        present(attachAlert, animated: true)
     }
+    
+    
+    func inputView(_ view: CustomeInputView, wantUploadMessage message: String) {
+        MessageService.fetchSingleRecentMsg(otherUser: otherUser) { [unowned self] unreadCount in
+            MessageService.uploadMessage(message: message, currentUser: currentUser, unReadCount: unreadCount + 1, otherUser: otherUser) { error in
+                self.collectionView.reloadData()
+                
+            }
+        }
+        view.clearTextView()
+    }
+}

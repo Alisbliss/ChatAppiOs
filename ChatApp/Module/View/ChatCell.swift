@@ -8,9 +8,16 @@
 import UIKit
 import SDWebImage
 
+protocol ChatCellDelegate: AnyObject {
+    func cell(wantToPlayVideo cell: ChatCell, videoURL: URL?)
+    func cell(wantToShowImage cell: ChatCell, imageURL: URL?)
+}
+
 class ChatCell: UICollectionViewCell {
     
     //MARK: Properties
+    weak var delegate: ChatCellDelegate?
+    
     var viewModel: MessageViewModel?{
         didSet {
             configure()
@@ -41,6 +48,24 @@ class ChatCell: UICollectionViewCell {
         return textView
     }()
     
+    private lazy var postImage: CustomImageView = {
+        let iv = CustomImageView()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleImage))
+        iv.addGestureRecognizer(tap)
+        iv.isUserInteractionEnabled = true
+        iv.isHidden = true
+        return iv
+    }()
+    
+    private lazy var postVideo: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "play.circle.fill"), for: .normal)
+        button.tintColor = .white
+        button.isHidden = true
+        button.setTitle("Play Video", for: .normal)
+        button.addTarget(self, action: #selector(handleVideoButton), for: .touchUpInside)
+        return button
+    }()
     //MARK: LifeCircle
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -55,6 +80,12 @@ class ChatCell: UICollectionViewCell {
         
         bubbleContainer.addSubview(textView)
         textView.anchor(top: bubbleContainer.topAnchor, left: bubbleContainer.leftAnchor, bottom: bubbleContainer.bottomAnchor, right: bubbleContainer.rightAnchor, paddingTop: 4, paddingLeft: 12, paddingBottom: 4, paddingRight: 12)
+        
+        bubbleContainer.addSubview(postImage)
+        postImage.anchor(top: bubbleContainer.topAnchor, left: bubbleContainer.leftAnchor, bottom: bubbleContainer.bottomAnchor, right: bubbleContainer.rightAnchor, paddingTop: 4, paddingLeft: 12, paddingBottom: 4, paddingRight: 12)
+        
+        bubbleContainer.addSubview(postVideo)
+        postVideo.anchor(top: bubbleContainer.topAnchor, left: bubbleContainer.leftAnchor, bottom: bubbleContainer.bottomAnchor, right: bubbleContainer.rightAnchor, paddingTop: 4, paddingLeft: 12, paddingBottom: 4, paddingRight: 12)
         
         bubbleLeftAnchor = bubbleContainer.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 12)
         bubbleLeftAnchor.isActive = false
@@ -91,5 +122,22 @@ class ChatCell: UICollectionViewCell {
         
         guard let timestampString = viewModel.timestampString else { return }
         dateLabel.text = timestampString
+        
+        postImage.sd_setImage(with: viewModel.imageURL)
+        textView.isHidden = viewModel.isTextHide
+        postImage.isHidden = viewModel.isImageHide
+        postVideo.isHidden = viewModel.isVideoHide
+        if !viewModel.isImageHide {
+            postImage.setHeight(200)
+        }
+    }
+    @objc func handleVideoButton() {
+        guard let viewModel = viewModel else { return }
+        delegate?.cell(wantToPlayVideo: self, videoURL: viewModel.videoURL)
+    }
+    
+    @objc func handleImage() {
+        guard let viewModel = viewModel else { return }
+        delegate?.cell(wantToShowImage: self, imageURL: viewModel.imageURL)
     }
 }

@@ -22,6 +22,12 @@ struct MessageViewModel {
     var leftAnchorActive: Bool {return !message.isFromCurrentUser }
     var shouldHideProfileImage: Bool { return message.isFromCurrentUser }
     var profileImageURL: URL? {return URL(string: message.profileImageURL)}
+    var imageURL: URL? { return URL(string: message.imageURL) }
+    var videoURL: URL? { return URL(string: message.videoURL)}
+    
+    var isImageHide: Bool { return message.imageURL == ""}
+    var isTextHide: Bool { return message.imageURL != ""}
+    var isVideoHide: Bool { return message.videoURL == ""}
     
     var timestampString: String? {
         let date = message.timestamp.dateValue()

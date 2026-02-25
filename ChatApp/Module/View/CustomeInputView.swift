@@ -9,6 +9,7 @@ import UIKit
 
 protocol CustomeInputDelegate: AnyObject {
     func inputView(_ view: CustomeInputView, wantUploadMessage message: String)
+    func inputViewforAttach(_ view: CustomeInputView)
 }
 
 class CustomeInputView: UIView {
@@ -20,6 +21,7 @@ class CustomeInputView: UIView {
         let iv = CustomImageView(width: 40, height: 40, backgroundColor: .red, cornerRadius: 20)
         iv.isUserInteractionEnabled = true
         iv.addGestureRecognizer(tap)
+        iv.isHidden = true
         return iv
     }()
     
@@ -29,11 +31,30 @@ class CustomeInputView: UIView {
         button.tintColor = .white
         button.addTarget(self, action: #selector(handlePostButton), for: .touchUpInside)
         button.setDimensions(height: 28, width: 28)
+        button.isHidden = true
+        return button
+    }()
+    
+    private lazy var attachButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setBackgroundImage(UIImage(systemName: "paperclip.circle"), for: .normal)
+        button.setDimensions(height: 40, width: 40)
+        button.tintColor = .red
+        button.addTarget(self, action: #selector(handleAttachButton), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var recordButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setBackgroundImage(UIImage(systemName: "mic.circle"), for: .normal)
+        button.setDimensions(height: 40, width: 40)
+        button.tintColor = .red
+        button.addTarget(self, action: #selector(handleRecordButton), for: .touchUpInside)
         return button
     }()
     
     private lazy var stackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [inputTextView, postBackgroundColor])
+        let stackView = UIStackView(arrangedSubviews: [inputTextView, postBackgroundColor, attachButton, recordButton])
         stackView.axis = .horizontal
         stackView.spacing = 8
         stackView.alignment = .center
@@ -59,6 +80,8 @@ class CustomeInputView: UIView {
         dividerView.backgroundColor = .lightGray
         addSubview(dividerView)
         dividerView.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 0.5)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleTextDidChange), name: InputTextView.textDidChangeNotification, object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -71,6 +94,22 @@ class CustomeInputView: UIView {
     //MARK: Helpers
     @objc func handlePostButton() {
         delegate?.inputView(self, wantUploadMessage: inputTextView.text)
+    }
+    @objc func handleAttachButton() {
+        delegate?.inputViewforAttach(self)
+    }
+    
+    @objc func handleRecordButton() {
+        
+    }
+    
+    @objc func handleTextDidChange() {
+        let isTextEmpty = inputTextView.text.isEmpty || inputTextView.text == ""
+        postButton.isHidden = isTextEmpty
+        postBackgroundColor.isHidden = isTextEmpty
+        
+        attachButton.isHidden = !isTextEmpty
+        recordButton.isHidden = !isTextEmpty
     }
     
     func clearTextView() {

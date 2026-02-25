@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F88A9CEF2F4F360400C35E21 /* ImageSlideshow in Frameworks */ = {isa = PBXBuildFile; productRef = F88A9CEE2F4F360400C35E21 /* ImageSlideshow */; };
 		F8C0A6BE2F45018800E8F5B3 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F8C0A6BD2F45018800E8F5B3 /* FirebaseAnalytics */; };
 		F8C0A6C02F45018800E8F5B3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F8C0A6BF2F45018800E8F5B3 /* FirebaseAuth */; };
 		F8C0A6C22F45018800E8F5B3 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F8C0A6C12F45018800E8F5B3 /* FirebaseDatabase */; };
@@ -53,6 +54,7 @@
 				F8C0A6C22F45018800E8F5B3 /* FirebaseDatabase in Frameworks */,
 				F8C0A6C42F45018800E8F5B3 /* FirebaseFirestore in Frameworks */,
 				F8C0A6D52F45066600E8F5B3 /* JGProgressHUD in Frameworks */,
+				F88A9CEF2F4F360400C35E21 /* ImageSlideshow in Frameworks */,
 				F8C0A6C62F45018800E8F5B3 /* FirebaseMessaging in Frameworks */,
 				F8C0A6CD2F4504D100E8F5B3 /* GoogleSignInSwift in Frameworks */,
 				F8C0A6BE2F45018800E8F5B3 /* FirebaseAnalytics in Frameworks */,
@@ -135,6 +137,7 @@
 				F8C0A6C92F4504D100E8F5B3 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				F8C0A6CE2F4505D100E8F5B3 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				F8C0A6D32F45066600E8F5B3 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
+				F88A9CED2F4F360400C35E21 /* XCRemoteSwiftPackageReference "ImageSlideshow" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F8CFF1312F4304F800A13D7F /* Products */;
@@ -374,6 +377,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		F88A9CED2F4F360400C35E21 /* XCRemoteSwiftPackageReference "ImageSlideshow" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zvonicek/ImageSlideshow?tab=readme-ov-file#-imageslideshow";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.9.2;
+			};
+		};
 		F8C0A6BC2F45018800E8F5B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -409,6 +420,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F88A9CEE2F4F360400C35E21 /* ImageSlideshow */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F88A9CED2F4F360400C35E21 /* XCRemoteSwiftPackageReference "ImageSlideshow" */;
+			productName = ImageSlideshow;
+		};
 		F8C0A6BD2F45018800E8F5B3 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F8C0A6BC2F45018800E8F5B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
