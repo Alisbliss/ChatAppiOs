@@ -10,6 +10,7 @@ import UIKit
 protocol CustomeInputDelegate: AnyObject {
     func inputView(_ view: CustomeInputView, wantUploadMessage message: String)
     func inputViewforAttach(_ view: CustomeInputView)
+    func inputViewForAudion(_ view: CustomeInputView, audioURL: URL)
 }
 
 class CustomeInputView: UIView {
@@ -53,7 +54,43 @@ class CustomeInputView: UIView {
         return button
     }()
     
-    private lazy var stackView: UIStackView = {
+    private lazy var cancelButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Cancel", for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        button.setDimensions(height: 40, width: 100)
+        button.addTarget(self, action: #selector(handleCancelButton), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var sendRecordButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Send", for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        button.tintColor = .white
+        button.backgroundColor = .red
+        button.setDimensions(height: 40, width: 100)
+        button.layer.cornerRadius = 12
+        button.clipsToBounds = true
+        button.addTarget(self, action: #selector(handleSendRecordButton), for: .touchUpInside)
+        return button
+    }()
+    
+    let timerLabel = CustomLabel(text: "00:00")
+    
+    lazy var recordStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [cancelButton, timerLabel, sendRecordButton])
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.isHidden = true
+        return stackView
+    }()
+    
+    let recorder = AKAudioRecorder.shared
+    var duration: CGFloat = 0.0
+    var timer: Timer!
+    
+    lazy var stackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [inputTextView, postBackgroundColor, attachButton, recordButton])
         stackView.axis = .horizontal
         stackView.spacing = 8
@@ -67,9 +104,8 @@ class CustomeInputView: UIView {
         backgroundColor = .white
         autoresizingMask = .flexibleHeight
         
-        
         addSubview(stackView)
-        stackView.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, paddingLeft: 12, paddingRight: 12)
+        stackView.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, paddingLeft: 5, paddingRight: 5)
         
         addSubview(postButton)
         postButton.center(inView: postBackgroundColor)
@@ -80,6 +116,9 @@ class CustomeInputView: UIView {
         dividerView.backgroundColor = .lightGray
         addSubview(dividerView)
         dividerView.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, height: 0.5)
+        
+        addSubview(recordStackView)
+        recordStackView.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 15, paddingLeft: 12, paddingRight: 12)
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleTextDidChange), name: InputTextView.textDidChangeNotification, object: nil)
     }
@@ -100,7 +139,13 @@ class CustomeInputView: UIView {
     }
     
     @objc func handleRecordButton() {
-        
+        stackView.isHidden = true
+        recordStackView.isHidden = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.recorder.myRecordings.removeAll()
+            self?.recorder.record()
+            self?.setTimer()
+        }
     }
     
     @objc func handleTextDidChange() {

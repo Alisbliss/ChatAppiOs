@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F88A9CEF2F4F360400C35E21 /* ImageSlideshow in Frameworks */ = {isa = PBXBuildFile; productRef = F88A9CEE2F4F360400C35E21 /* ImageSlideshow */; };
+		F88A9CF72F507A3400C35E21 /* SwiftAudioPlayer in Frameworks */ = {isa = PBXBuildFile; productRef = F88A9CF62F507A3400C35E21 /* SwiftAudioPlayer */; };
 		F8C0A6BE2F45018800E8F5B3 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F8C0A6BD2F45018800E8F5B3 /* FirebaseAnalytics */; };
 		F8C0A6C02F45018800E8F5B3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F8C0A6BF2F45018800E8F5B3 /* FirebaseAuth */; };
 		F8C0A6C22F45018800E8F5B3 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F8C0A6C12F45018800E8F5B3 /* FirebaseDatabase */; };
@@ -61,6 +62,7 @@
 				F8C0A6C02F45018800E8F5B3 /* FirebaseAuth in Frameworks */,
 				F8C0A6D22F4505D100E8F5B3 /* SDWebImageMapKit in Frameworks */,
 				F8C0A6D02F4505D100E8F5B3 /* SDWebImage in Frameworks */,
+				F88A9CF72F507A3400C35E21 /* SwiftAudioPlayer in Frameworks */,
 				F8C0A6C82F45018800E8F5B3 /* FirebaseStorage in Frameworks */,
 				F8C0A6CB2F4504D100E8F5B3 /* GoogleSignIn in Frameworks */,
 			);
@@ -138,6 +140,7 @@
 				F8C0A6CE2F4505D100E8F5B3 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				F8C0A6D32F45066600E8F5B3 /* XCRemoteSwiftPackageReference "JGProgressHUD" */,
 				F88A9CED2F4F360400C35E21 /* XCRemoteSwiftPackageReference "ImageSlideshow" */,
+				F88A9CF52F507A3400C35E21 /* XCRemoteSwiftPackageReference "SwiftAudioPlayer" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F8CFF1312F4304F800A13D7F /* Products */;
@@ -385,6 +388,14 @@
 				minimumVersion = 1.9.2;
 			};
 		};
+		F88A9CF52F507A3400C35E21 /* XCRemoteSwiftPackageReference "SwiftAudioPlayer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tanhakabir/SwiftAudioPlayer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.6.0;
+			};
+		};
 		F8C0A6BC2F45018800E8F5B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -424,6 +435,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F88A9CED2F4F360400C35E21 /* XCRemoteSwiftPackageReference "ImageSlideshow" */;
 			productName = ImageSlideshow;
+		};
+		F88A9CF62F507A3400C35E21 /* SwiftAudioPlayer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F88A9CF52F507A3400C35E21 /* XCRemoteSwiftPackageReference "SwiftAudioPlayer" */;
+			productName = SwiftAudioPlayer;
 		};
 		F8C0A6BD2F45018800E8F5B3 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

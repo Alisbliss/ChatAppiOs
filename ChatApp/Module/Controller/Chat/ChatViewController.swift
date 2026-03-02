@@ -13,6 +13,8 @@ class ChatViewController: UICollectionViewController {
     
     private var messages = [[Message]]()
     
+    var audioStatusSubscription: Any?
+    
     private lazy var customeInputView: CustomeInputView = {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 50)
         let view = CustomeInputView(frame: frame)
@@ -166,6 +168,17 @@ class ChatViewController: UICollectionViewController {
     }
     
 extension ChatViewController: CustomeInputDelegate {
+    func inputViewForAudion(_ view: CustomeInputView, audioURL: URL) {
+        self.showLoader(true)
+        FileUploader.uploadAudio(audioURL: audioURL) { [unowned self] audioString in
+            MessageService.fetchSingleRecentMsg(otherUser: self.otherUser) { unReadCount in
+                MessageService.uploadMessage(audioURL: audioString, currentUser: self.currentUser, unReadCount: unReadCount + 1, otherUser: self.otherUser) { error in
+                    self.showLoader(false)
+                }
+            }
+        }
+    }
+    
     func inputViewforAttach(_ view: CustomeInputView) {
         present(attachAlert, animated: true)
     }

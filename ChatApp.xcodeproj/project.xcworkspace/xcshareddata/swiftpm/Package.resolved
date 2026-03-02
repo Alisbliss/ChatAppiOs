@@ -1,5 +1,5 @@
 {
-  "originHash" : "cb38b6805c3f7c0fbfe22ae32b12a5c7035fc447dc5575178eee24ae9282c1b4",
+  "originHash" : "681b8b71b99386d9194d69e174d4f1a4ff6811fe7790c10dd9c48b76be14ce16",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -197,6 +197,15 @@
       "state" : {
         "revision" : "449e8f8f10377f620db8ad22ea81208eecf6325f",
         "version" : "5.21.6"
+      }
+    },
+    {
+      "identity" : "swiftaudioplayer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tanhakabir/SwiftAudioPlayer",
+      "state" : {
+        "revision" : "2fdfc62ce9f5d8b818ee1b2a9ac061fce4f64af9",
+        "version" : "7.6.0"
       }
     }
   ],
