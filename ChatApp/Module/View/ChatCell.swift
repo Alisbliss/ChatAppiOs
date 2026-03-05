@@ -12,6 +12,7 @@ protocol ChatCellDelegate: AnyObject {
     func cell(wantToPlayVideo cell: ChatCell, videoURL: URL?)
     func cell(wantToShowImage cell: ChatCell, imageURL: URL?)
     func cell(wantToPlayAudio cell: ChatCell, audioURL: URL?, isPlay: Bool)
+    func cell(wantToOpenGoogleMap cell: ChatCell, locationURL: URL?)
 }
 
 class ChatCell: UICollectionViewCell {
@@ -78,6 +79,16 @@ class ChatCell: UICollectionViewCell {
         return button
     }()
     
+    private lazy var postLocation: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "location.circle"), for: .normal)
+        button.tintColor = .white
+        button.isHidden = true
+        button.setTitle("Google Map", for: .normal)
+        button.addTarget(self, action: #selector(handleLocationButton), for: .touchUpInside)
+        return button
+    }()
+    
     var isVoicePlaying: Bool = true
     
     //MARK: LifeCircle
@@ -100,6 +111,9 @@ class ChatCell: UICollectionViewCell {
         
         bubbleContainer.addSubview(postAudio)
         postAudio.anchor(top: bubbleContainer.topAnchor, left: bubbleContainer.leftAnchor, bottom: bubbleContainer.bottomAnchor, right: bubbleContainer.rightAnchor, paddingTop: 4, paddingLeft: 12, paddingBottom: 4, paddingRight: 12)
+        
+        bubbleContainer.addSubview(postLocation)
+        postLocation.anchor(top: bubbleContainer.topAnchor, left: bubbleContainer.leftAnchor, bottom: bubbleContainer.bottomAnchor, right: bubbleContainer.rightAnchor, paddingTop: 4, paddingLeft: 12, paddingBottom: 4, paddingRight: 12)
         
         bubbleContainer.addSubview(postVideo)
         postVideo.anchor(top: bubbleContainer.topAnchor, left: bubbleContainer.leftAnchor, bottom: bubbleContainer.bottomAnchor, right: bubbleContainer.rightAnchor, paddingTop: 4, paddingLeft: 12, paddingBottom: 4, paddingRight: 12)
@@ -145,6 +159,7 @@ class ChatCell: UICollectionViewCell {
         postImage.isHidden = viewModel.isImageHide
         postVideo.isHidden = viewModel.isVideoHide
         postAudio.isHidden = viewModel.isAudioHide
+        postLocation.isHidden = viewModel.isHideLocation
         if !viewModel.isImageHide {
             postImage.setHeight(200)
         }
@@ -167,6 +182,11 @@ class ChatCell: UICollectionViewCell {
     @objc func handleImage() {
         guard let viewModel = viewModel else { return }
         delegate?.cell(wantToShowImage: self, imageURL: viewModel.imageURL)
+    }
+    
+    @objc func handleLocationButton() {
+        guard let viewModel = viewModel else { return }
+        delegate?.cell(wantToOpenGoogleMap: self, locationURL: viewModel.locationURL)
     }
     
     func resetAudioSettings() {

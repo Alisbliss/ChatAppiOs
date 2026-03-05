@@ -31,7 +31,20 @@ class ChatViewController: UICollectionViewController {
             self?.handleGallery()
         }))
         alert.addAction(UIAlertAction(title: "Location", style: .default, handler: { _ in
-            print("location")
+            guard let self else { return }
+            self.present(self.locationAlert, animated: true)
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        return alert
+    }()
+    
+    private lazy var locationAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Share location", message: "Select the button you want to share location from", preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Current Location", style: .default, handler: { [weak self] _ in
+            self?.handleCurrentLocation()
+        }))
+        alert.addAction(UIAlertAction(title: "Google Location", style: .default, handler: { [weak self] _ in
+            self?.handleGoogleMap()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         return alert

@@ -23,6 +23,40 @@ extension ChatViewController {
         imagePicker.mediaTypes = ["public.image", "public.movie"]
         present(imagePicker, animated: true)
     }
+    
+    @objc func handleCurrentLocation() {
+        FLocationManager.shared.start { [weak self] info in
+            guard let self else { return }
+            guard let lat = info.latitude else { return }
+            guard let lng = info.longitude else { return }
+            self.uploadLocation(lat: "\(lat)" , lng: "\(lng)")
+            
+            FLocationManager.shared.stop()
+        }
+    }
+    
+    @objc func handleGoogleMap() {
+        let controller = ChatMapVC()
+        controller.delegate = self
+        navigationController?.pushViewController(controller, animated: true)
+    }
+
+    func uploadLocation(lat: String, lng: String ) {
+        let locationURL = "https://www.google.com/maps/dir/?api=1&destination=\(lat),\(lng)"
+        self.showLoader(true)
+        
+        MessageService.fetchSingleRecentMsg(otherUser: otherUser) { [weak self] unReadCount in
+            guard let self else { return }
+            MessageService.uploadMessage(locationURL: locationURL,currentUser: self.currentUser, unReadCount: unReadCount + 1, otherUser: self.otherUser) { error in
+                self.showLoader(false)
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+            }
+        }
+    }
+    
 }
 //MARK: -UIImagePickerControllerDelegate
 extension ChatViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -113,4 +147,25 @@ extension ChatViewController: ChatCellDelegate {
             SAPlayer.shared.stopStreamingRemoteAudio()
         }
     }
+    
+    func cell(wantToOpenGoogleMap cell: ChatCell, locationURL: URL?) {
+        guard let googleURLApp = URL(string: "comgooglemaps://") else { return }
+        guard let locationURL else { return }
+        if UIApplication.shared.canOpenURL(googleURLApp) {
+            ///here we have the app
+            UIApplication.shared.open(locationURL)
+        } else {
+            ///we don't have app
+            UIApplication.shared.open(locationURL, options: [:])
+        }
+    }
+}
+
+extension ChatViewController: ChatMapDelegate {
+    func didTapLocation(lat: String, lng: String) {
+        navigationController?.popViewController(animated: true)
+        uploadLocation(lat: lat, lng: lng)
+    }
+    
+    
 }

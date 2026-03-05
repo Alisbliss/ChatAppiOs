@@ -20,6 +20,7 @@ struct Message {
     let imageURL: String
     let videoURL: String
     let audioURL: String
+    let locationURL: String
     
     var isFromCurrentUser: Bool
     
@@ -41,5 +42,6 @@ struct Message {
         self.imageURL = dictionary["imageURL"] as? String ?? ""
         self.videoURL = dictionary["videoURL"] as? String ?? ""
         self.audioURL = dictionary["audioURL"] as? String ?? ""
+        self.locationURL = dictionary["locationURL"] as? String ?? ""
     }
 }

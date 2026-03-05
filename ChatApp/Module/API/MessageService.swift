@@ -33,7 +33,7 @@ struct MessageService {
     }
     }
     
-    static func uploadMessage(message: String = "", imageURL: String = "", videoURL: String = "", audioURL: String = "", currentUser: User, unReadCount: Int, otherUser: User, completion: ((Error?) -> Void)?) {
+    static func uploadMessage(message: String = "", imageURL: String = "", videoURL: String = "", audioURL: String = "", locationURL: String = "", currentUser: User, unReadCount: Int, otherUser: User, completion: ((Error?) -> Void)?) {
         let dataFrom: [String: Any] = [
             "text": message,
             "fromID": currentUser.uid,
@@ -47,7 +47,8 @@ struct MessageService {
             "new_msg": 0,
             "imageURL": imageURL,
             "videoURL": videoURL,
-            "audioURL": audioURL
+            "audioURL": audioURL,
+            "locationURL": locationURL
         ]
         
         let dataTo: [String: Any] = [
@@ -63,7 +64,8 @@ struct MessageService {
             "new_msg": unReadCount,
             "imageURL": imageURL,
             "videoURL": videoURL,
-            "audioURL": audioURL
+            "audioURL": audioURL,
+            "locationURL": locationURL
         ]
         
         Collection_Message.document(currentUser.uid).collection(otherUser.uid).addDocument(data: dataFrom) { error in
