@@ -29,6 +29,30 @@ A real-time messaging application built with Swift and Firebase, following the M
     </td>
   </tr>
 
+ <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/10cd764e-2a49-4648-be0c-f928fb1a6712" width="100%">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/24a7b4bb-538a-4606-b8fe-afa0a104bad9" width="100%">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/ec29bba9-a4bd-4c33-bace-72a4e856607a" width="100%">
+    </td>
+  </tr>
+
+   <tr>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/5d2bc991-f0d3-4957-83c9-4970a0cce8b3" width="100%">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/e28a83d4-0d08-4faa-b1fd-7f9a4d590701" width="100%">
+    </td>
+    <td align="center">
+      <img src="https://github.com/user-attachments/assets/aec7d7ee-a9bf-4813-afcb-75c1d8d80f27" width="100%">
+    </td>
+  </tr>
+
   <tr>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/2728670c-2a9e-4d40-8831-02de7eb12814" width="100%">
