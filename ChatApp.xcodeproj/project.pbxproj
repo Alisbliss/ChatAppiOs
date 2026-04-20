@@ -44,6 +44,7 @@
 		F8079D7E2F58906100CA7F16 /* SwiftAudioPlayer in Frameworks */ = {isa = PBXBuildFile; productRef = F8079D7D2F58906100CA7F16 /* SwiftAudioPlayer */; };
 		F88A9CEF2F4F360400C35E21 /* ImageSlideshow in Frameworks */ = {isa = PBXBuildFile; productRef = F88A9CEE2F4F360400C35E21 /* ImageSlideshow */; };
 		F88A9CF72F507A3400C35E21 /* SwiftAudioPlayer in Frameworks */ = {isa = PBXBuildFile; productRef = F88A9CF62F507A3400C35E21 /* SwiftAudioPlayer */; };
+		F8A4596B2F96B0E20041659D /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F8A4596A2F96B0E20041659D /* IQKeyboardManagerSwift */; };
 		F8C0A6BE2F45018800E8F5B3 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F8C0A6BD2F45018800E8F5B3 /* FirebaseAnalytics */; };
 		F8C0A6C02F45018800E8F5B3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F8C0A6BF2F45018800E8F5B3 /* FirebaseAuth */; };
 		F8C0A6C22F45018800E8F5B3 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = F8C0A6C12F45018800E8F5B3 /* FirebaseDatabase */; };
@@ -127,6 +128,7 @@
 				F8079D422F587A5B00CA7F16 /* FirebaseAuth in Frameworks */,
 				F8079D702F58829200CA7F16 /* SDWebImage in Frameworks */,
 				F8C0A6CD2F4504D100E8F5B3 /* GoogleSignInSwift in Frameworks */,
+				F8A4596B2F96B0E20041659D /* IQKeyboardManagerSwift in Frameworks */,
 				F8C0A6BE2F45018800E8F5B3 /* FirebaseAnalytics in Frameworks */,
 				F8C0A6C02F45018800E8F5B3 /* FirebaseAuth in Frameworks */,
 				F8C0A6D22F4505D100E8F5B3 /* SDWebImageMapKit in Frameworks */,
@@ -216,6 +218,7 @@
 				F8079D6E2F58829200CA7F16 /* XCRemoteSwiftPackageReference "SDWebImage" */,
 				F8079D732F588C6900CA7F16 /* XCRemoteSwiftPackageReference "ImageSlideshow" */,
 				F8079D7C2F58906100CA7F16 /* XCRemoteSwiftPackageReference "SwiftAudioPlayer" */,
+				F8A459692F96B0E20041659D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F8CFF1312F4304F800A13D7F /* Products */;
@@ -527,6 +530,14 @@
 				minimumVersion = 7.6.0;
 			};
 		};
+		F8A459692F96B0E20041659D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.2;
+			};
+		};
 		F8C0A6BC2F45018800E8F5B3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -762,6 +773,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F88A9CF52F507A3400C35E21 /* XCRemoteSwiftPackageReference "SwiftAudioPlayer" */;
 			productName = SwiftAudioPlayer;
+		};
+		F8A4596A2F96B0E20041659D /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8A459692F96B0E20041659D /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 		F8C0A6BD2F45018800E8F5B3 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
