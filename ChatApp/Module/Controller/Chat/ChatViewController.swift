@@ -11,7 +11,11 @@ import Firebase
 class ChatViewController: UICollectionViewController {
     //MARK: Properties
     
-    private var messages = [[Message]]()
+    private var messages = [[Message]](){
+        didSet {
+            emptyView.isHidden = !messages.isEmpty
+        }
+    }
     
     var audioStatusSubscription: Any?
     
@@ -57,8 +61,19 @@ class ChatViewController: UICollectionViewController {
         return picker
     }()
     
+    private let emptyView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black.withAlphaComponent(0.5)
+        view.layer.cornerRadius = 12
+        view.isHidden = true
+        return view
+    }()
+    
+    private let emptyLabel = CustomLabel(text: "The conversation is new and encrypted.", labelColor: .yellow)
+    
     var currentUser: User
     var otherUser: User
+    
     //MARK: LifeCircle
     init(currentUser: User,otherUser: User) {
         self.currentUser = currentUser
@@ -74,7 +89,8 @@ class ChatViewController: UICollectionViewController {
         super.viewDidLoad()
         configure()
         fetchMessages()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self else { return }
             self.markReadAllMsg()
         }
     }
@@ -103,6 +119,12 @@ class ChatViewController: UICollectionViewController {
         
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         layout?.sectionHeadersPinToVisibleBounds = true
+        
+        view.addSubview(emptyView)
+        emptyView.anchor(left: view.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, right: view.rightAnchor, paddingLeft: 25, paddingBottom: 70, paddingRight: 25, height: 50)
+        
+        emptyView.addSubview(emptyLabel)
+        emptyLabel.anchor(top: emptyView.topAnchor, left: emptyView.leftAnchor, bottom: emptyView.bottomAnchor, right: emptyView.rightAnchor, paddingTop: 7, paddingLeft: 7, paddingBottom: 7, paddingRight: 7)
     }
     
     private func fetchMessages() {

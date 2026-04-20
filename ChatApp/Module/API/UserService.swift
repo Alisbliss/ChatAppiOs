@@ -7,6 +7,7 @@
 
 import Foundation
 import Firebase
+import FirebaseAuth
 
 struct UserService {
     static func fetchUser(uid: String, completion: @escaping (User) -> Void) {
@@ -26,5 +27,11 @@ struct UserService {
             let users = snapshot.documents.map({User(dictionary: $0.data())})
             completion(users)
         }
+    }
+    
+    static func setNewUserData(data: [String: Any], completion: @escaping(Error?) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        Collection_User.document(uid).updateData(data, completion: completion)
     }
 }
