@@ -1,0 +1,16 @@
+# Xcode
+build/
+DerivedData/
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace/xcuserdata/
+*.xcuserdatad
+MOST_PRIVATE_DATA
+GoogleService-Info.plist
+
+# Swift Package Manager
+.build/
+Packages.resolved
+.swiftpm/xcode/package.xcworkspace/xcuserdata/
+
